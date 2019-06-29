@@ -1,0 +1,57 @@
+{
+    "name": "user/repository",
+    "type": "library",
+    "description": "description",
+    "keywords": [
+        "keyword"
+    ],
+    "homepage": "https://github.com/user/repository",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Your Fullname",
+            "email": "your@email.com"
+        }
+    ],
+    "require": {
+        "php": "^7.3"
+    },
+    "require-dev": {
+        "jangregor/phpstan-prophecy": "^0.4.0",
+        "phpstan/phpstan": "^0.11.4",
+        "phpstan/extension-installer": "^1.0",
+        "phpunit/phpunit": "^8.0",
+        "roave/security-advisories": "dev-master",
+        "squizlabs/php_codesniffer": "^3.4"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Namespace": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Namespace\\Test\\Integration\\": "tests/Integration",
+            "Namespace\\Test\\Unit\\": "tests/Unit"
+        }
+    },
+    "scripts": {
+        "analyse": "phpstan analyse --no-progress",
+        "check": [
+            "@cs-check",
+            "@analyse",
+            "@test"
+        ],
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf",
+        "test": "phpunit"
+    },
+    "support": {
+        "issues": "https://github.com/user/repository/issues",
+        "source": "https://github.com/user/repository"
+    }
+}
