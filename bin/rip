@@ -1,0 +1,16 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+
+require __DIR__.'/../vendor/autoload.php';
+
+use Icanhazstring\RandomIssuePicker\Command\RandomIssueCommand;
+use Symfony\Component\Console\Application;
+
+Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
+
+$application = new Application();
+
+$application->add(new RandomIssueCommand());
+
+$application->run();

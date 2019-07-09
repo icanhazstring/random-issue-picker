@@ -1,20 +1,26 @@
 {
-    "name": "user/repository",
+    "name": "icanhazstring/random-issue-picker",
     "type": "library",
-    "description": "description",
+    "description": "Select random github issue by certain criteria",
     "keywords": [
-        "keyword"
+        "github",
+        "issue",
+        "random"
     ],
-    "homepage": "https://github.com/user/repository",
+    "homepage": "https://github.com/icanhazstring/random-issue-picker",
     "license": "MIT",
     "authors": [
         {
-            "name": "Your Fullname",
-            "email": "your@email.com"
+            "name": "Andreas Frömer",
+            "email": "icanhazstring@noreply.github.com"
         }
     ],
     "require": {
-        "php": "^7.3"
+        "php": "^7.3",
+        "ext-json": "*",
+        "guzzlehttp/guzzle": "^6.3",
+        "jms/serializer": "^3.1",
+        "symfony/console": "^4.3"
     },
     "require-dev": {
         "jangregor/phpstan-prophecy": "^0.4.0",
@@ -30,13 +36,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Namespace": "src"
+            "Icanhazstring\\RandomIssuePicker\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Namespace\\Test\\Integration\\": "tests/Integration",
-            "Namespace\\Test\\Unit\\": "tests/Unit"
+            "Icanhazstring\\RandomIssuePicker\\Test\\Integration\\": "tests/Integration",
+            "Icanhazstring\\RandomIssuePicker\\Test\\Unit\\": "tests/Unit"
         }
     },
     "scripts": {
@@ -51,7 +57,7 @@
         "test": "phpunit"
     },
     "support": {
-        "issues": "https://github.com/user/repository/issues",
-        "source": "https://github.com/user/repository"
+        "issues": "https://github.com/icanhazstring/random-issue-picker/issues",
+        "source": "https://github.com/icanhazstring/random-issue-picker"
     }
 }
