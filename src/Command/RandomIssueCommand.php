@@ -29,6 +29,11 @@ class RandomIssueCommand extends Command
         $this->setDescription('Select a random issue and show link and description.');
     }
 
+    /**
+     * Executes the current command.
+     *
+     * @return int|null null or 0 if everything went fine, or an error code
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
@@ -61,5 +66,7 @@ class RandomIssueCommand extends Command
         }
 
         $io->writeln($randomIssueBody);
+
+        return 0;
     }
 }
