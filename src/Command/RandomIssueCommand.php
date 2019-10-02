@@ -62,7 +62,7 @@ class RandomIssueCommand extends Command
         $randomIssueBody = $randomIssue->getBody();
 
         if (strlen($randomIssue->getBody()) > 300) {
-            $randomIssueBody = substr($randomIssue->getBody(), 0, 100) . '...';
+            $randomIssueBody = substr($randomIssue->getBody(), 0, 300) . '...';
         }
 
         $io->writeln($randomIssueBody);
