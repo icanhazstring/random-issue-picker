@@ -18,17 +18,14 @@
     "require": {
         "php": "^7.3",
         "ext-json": "*",
-        "guzzlehttp/guzzle": "^6.3",
-        "jms/serializer": "^3.1",
-        "symfony/console": "^4.3"
+        "guzzlehttp/guzzle": "^7.1",
+        "jms/serializer": "^3.9",
+        "symfony/console": "^5.1"
     },
     "require-dev": {
-        "jangregor/phpstan-prophecy": "^0.4.0",
-        "phpstan/phpstan": "^0.11.4",
-        "phpstan/extension-installer": "^1.0",
-        "phpunit/phpunit": "^8.0",
+        "phpstan/phpstan": "^0.12.47",
         "roave/security-advisories": "dev-master",
-        "squizlabs/php_codesniffer": "^3.4"
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "config": {
         "preferred-install": "dist",
@@ -49,12 +46,10 @@
         "analyse": "phpstan analyse --no-progress",
         "check": [
             "@cs-check",
-            "@analyse",
-            "@test"
+            "@analyse"
         ],
         "cs-check": "phpcs",
-        "cs-fix": "phpcbf",
-        "test": "phpunit"
+        "cs-fix": "phpcbf"
     },
     "support": {
         "issues": "https://github.com/icanhazstring/random-issue-picker/issues",

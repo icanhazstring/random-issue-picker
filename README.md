@@ -30,3 +30,20 @@ Default values:
 
 ## Watch me create this tool
 [YouTube : Making The Tool](https://www.youtube.com/watch?v=QRf4CQxpznM)
+
+## How to contribute
+
+```shell
+$ git clone https://github.com/icanhazstring/random-issue-picker.git
+```
+
+The minimum requirement, as mentioned above, is PHP 7.3. You either have it installed locally, or you can
+run the tool and every check using `docker`. There is `Makefile` present to support your work.
+
+You can run `make up` to build the image and run the container.
+> For more available commands refer to the [Makefile](Makefile)
+
+After you have done this, you can install the dependencies using `make composer install`.
+If you made you changed, create a pull request and you are ready to go.
+
+Have fun contributing :+1:
