@@ -6,7 +6,7 @@ Requirements:
 * Composer
 * PHP 7.3+
 
-##How to use it
+## How to use it
 
 ```shell
 $ git clone https://github.com/icanhazstring/random-issue-picker.git
@@ -26,4 +26,4 @@ Default values:
 | Parameter        |  Default Value       |
 |------------------|----------------------|
 | --language, -l   | php                  |
-|  -- label        | "good first issue"   |
+| --label          | "good first issue"   |
