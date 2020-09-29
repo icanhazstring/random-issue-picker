@@ -46,12 +46,10 @@
         "analyse": "phpstan analyse --no-progress",
         "check": [
             "@cs-check",
-            "@analyse",
-            "@test"
+            "@analyse"
         ],
         "cs-check": "phpcs",
-        "cs-fix": "phpcbf",
-        "test": "phpunit"
+        "cs-fix": "phpcbf"
     },
     "support": {
         "issues": "https://github.com/icanhazstring/random-issue-picker/issues",
