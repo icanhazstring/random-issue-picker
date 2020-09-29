@@ -26,5 +26,8 @@ csfix:
 ssh:
 	docker exec -it $(CONTAINER) /bin/bash
 
+pick-issue:
+	docker exec -it $(CONTAINER) bin/rip random:issue
+
 %:
 	@true
