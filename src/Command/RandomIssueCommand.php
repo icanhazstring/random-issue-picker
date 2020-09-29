@@ -1,9 +1,12 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Icanhazstring\RandomIssuePicker\Command;
 
+use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Icanhazstring\RandomIssuePicker\Model\SearchIssueModel;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\Console\Command\Command;
@@ -25,7 +28,7 @@ class RandomIssueCommand extends Command
         $this->client = new Client();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Select a random issue and show link and description.');
 
@@ -45,19 +48,23 @@ class RandomIssueCommand extends Command
     }
 
     /**
-     * Executes the current command.
-     *
-     * @return int|null null or 0 if everything went fine, or an error code
+     * @throws Exception
+     * @throws GuzzleException
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
         $randomPageIndex = random_int(1, 10);
         $randomIssueIndex = random_int(0, 99);
 
-        $language = $input->getOption('language') ?: 'php';
-        $label = $input->getOption('label') ?: 'good first issue';
+        /** @var string|null $languageInput */
+        $languageInput = $input->getOption('language');
+        /** @var string|null  $labelInput */
+        $labelInput = $input->getOption('label');
+
+        $language = $languageInput ?? 'php';
+        $label = $labelInput ?? 'good first issue';
 
         $res = $this->client->request('GET', 'https://api.github.com/search/issues', [
             'query' => [
