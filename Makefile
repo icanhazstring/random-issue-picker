@@ -9,10 +9,7 @@ down:
 composer:
 	docker exec -it $(CONTAINER) composer $(filter-out $@, $(MAKECMDGOALS))
 
-check: csfix cs phpunit analyse
-
-phpunit:
-	docker exec -it $(CONTAINER) vendor/bin/phpunit
+check: cs analyse
 
 analyse:
 	docker exec -it $(CONTAINER) vendor/bin/phpstan analyse
@@ -26,7 +23,7 @@ csfix:
 ssh:
 	docker exec -it $(CONTAINER) /bin/bash
 
-pick-issue:
+rip:
 	docker exec -it $(CONTAINER) bin/rip random:issue
 
 %:
