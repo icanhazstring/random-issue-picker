@@ -86,7 +86,6 @@ class RandomIssueCommand extends Command
         $randomIssue = $searchIssueModel->getItems()[$randomIssueIndex];
 
         $io->section($randomIssue->getTitle());
-        $io->writeln($randomIssue->getCreatedAt()->format('Y-m-d'));
         $io->writeln($randomIssue->getUrl());
         $io->newLine(2);
 
