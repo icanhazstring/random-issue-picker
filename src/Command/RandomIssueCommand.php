@@ -60,7 +60,7 @@ class RandomIssueCommand extends Command
 
         /** @var string|null $languageInput */
         $languageInput = $input->getOption('language');
-        /** @var string|null  $labelInput */
+        /** @var string|null $labelInput */
         $labelInput = $input->getOption('label');
 
         $language = $languageInput ?? 'php';
@@ -86,6 +86,7 @@ class RandomIssueCommand extends Command
         $randomIssue = $searchIssueModel->getItems()[$randomIssueIndex];
 
         $io->section($randomIssue->getTitle());
+        $io->writeln($randomIssue->getCreatedAt()->format('Y-m-d'));
         $io->writeln($randomIssue->getUrl());
         $io->newLine(2);
 
