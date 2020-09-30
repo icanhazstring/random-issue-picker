@@ -88,7 +88,7 @@ class RandomIssueCommand extends Command
 
         $randomIssueTitle = $randomIssue->getTitle();
 
-        // cut off body at 300 characters
+        // cut off title at 90 characters
         if (strlen($randomIssue->getTitle()) > 90) {
             $randomIssueTitle = substr($randomIssue->getTitle(), 0, 90) . '...';
         }
@@ -100,7 +100,7 @@ class RandomIssueCommand extends Command
             $randomIssueBody = substr($randomIssue->getBody(), 0, 300) . '...';
         }
 
-        // output details
+        // output details heading
         $io->writeln([
             "",
             "<comment> Details:</>",
@@ -110,7 +110,7 @@ class RandomIssueCommand extends Command
         // create a table for displaying the title and link
         $table = new Table($output);
         $table->setHeaders([
-            // title in green text
+            // label in white text, title in green text
             ['<fg=white>Title:</>', sprintf('<info>%s</>', $randomIssueTitle)]
         ]);
         $table->setRows([
@@ -120,9 +120,9 @@ class RandomIssueCommand extends Command
         // render table
         $table->render();
 
-        // print body if it is not empty
+        // print body only if it is not empty
         if (strlen($randomIssue->getBody()) > 0) {
-            // output issue
+            // output issue heading
             $io->writeln([
                 "",
                 "<comment> Issue:</>",
@@ -132,7 +132,7 @@ class RandomIssueCommand extends Command
             $randomIssueBodyLines = wordwrap($randomIssueBody, 70, "\n", true);
             // indent all lines with two spaces
             $randomIssueBodyLines = preg_replace("/(^|\n)/", "$1  ", $randomIssueBodyLines);
-            // render
+            // render body
             $io->writeln($randomIssueBodyLines);
         }
 
