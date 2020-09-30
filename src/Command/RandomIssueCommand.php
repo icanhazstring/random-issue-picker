@@ -133,7 +133,7 @@ class RandomIssueCommand extends Command
             // indent all lines with two spaces
             $randomIssueBodyLines = preg_replace("/(^|\n)/", "$1  ", $randomIssueBodyLines);
             // render body
-            $io->writeln($randomIssueBodyLines);
+            $io->writeln(strval($randomIssueBodyLines));
         }
 
         $io->newLine(1);
