@@ -1,4 +1,3 @@
-.docker/
 composer.phar
 /vendor/
 cs-check.json
