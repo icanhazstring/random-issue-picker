@@ -86,12 +86,17 @@ class RandomIssueCommand extends Command
 
         $randomIssue = $searchIssueModel->getItems()[$randomIssueIndex];
 
+        $io->section($randomIssue->getTitle());
+
+        $io->newLine(1);
+
         $randomIssueTitle = $randomIssue->getTitle();
 
         // cut off title at 90 characters
         if (strlen($randomIssue->getTitle()) > 90) {
             $randomIssueTitle = substr($randomIssue->getTitle(), 0, 90) . '...';
         }
+
 
         $randomIssueBody = $randomIssue->getBody();
 
@@ -114,8 +119,11 @@ class RandomIssueCommand extends Command
             ['<fg=white>Title:</>', sprintf('<info>%s</>', $randomIssueTitle)]
         ]);
         $table->setRows([
-            ['Link:', sprintf("<href=%s>%s</>", $randomIssue->getUrl(), $randomIssue->getUrl())]
+            ['Link:', sprintf("<href=%s>%s</>", $randomIssue->getUrl(), $randomIssue->getUrl())],
+            ['Date Created:', $randomIssue->getCreatedDate()],
+            ['Status:', $randomIssue->getState()],
         ]);
+
         $table->setStyle('box');
         // render table
         $table->render();
@@ -137,6 +145,8 @@ class RandomIssueCommand extends Command
         }
 
         $io->newLine(1);
+
+
 
         return 0;
     }
