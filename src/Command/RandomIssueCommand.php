@@ -86,17 +86,12 @@ class RandomIssueCommand extends Command
 
         $randomIssue = $searchIssueModel->getItems()[$randomIssueIndex];
 
-        $io->section($randomIssue->getTitle());
-
-        $io->newLine(1);
-
         $randomIssueTitle = $randomIssue->getTitle();
 
         // cut off title at 90 characters
-        if (strlen($randomIssue->getTitle()) > 90) {
-            $randomIssueTitle = substr($randomIssue->getTitle(), 0, 90) . '...';
+        if (strlen($randomIssue->getTitle()) > 70) {
+            $randomIssueTitle = substr($randomIssue->getTitle(), 0, 70) . '...';
         }
-
 
         $randomIssueBody = $randomIssue->getBody();
 
@@ -109,7 +104,7 @@ class RandomIssueCommand extends Command
         $io->writeln([
             "",
             "<comment> Details:</>",
-            sprintf("<comment> %s</>", str_repeat("-", 60))
+            sprintf("<comment> %s</>", str_repeat("-", 70))
         ]);
 
         // create a table for displaying the title and link
@@ -123,8 +118,7 @@ class RandomIssueCommand extends Command
             ['Date Created:', $randomIssue->getCreatedDate()],
             ['Status:', $randomIssue->getState()],
         ]);
-
-        $table->setStyle('box');
+        $table->setStyle('borderless');
         // render table
         $table->render();
 
@@ -134,7 +128,7 @@ class RandomIssueCommand extends Command
             $io->writeln([
                 "",
                 "<comment> Issue:</>",
-                sprintf("<comment> %s</>", str_repeat("-", 60))
+                sprintf("<comment> %s</>", str_repeat("-", 70))
             ]);
             // wrap lines that are longer than 70 characters
             $randomIssueBodyLines = wordwrap($randomIssueBody, 70, "\n", true);
@@ -145,8 +139,6 @@ class RandomIssueCommand extends Command
         }
 
         $io->newLine(1);
-
-
 
         return 0;
     }
