@@ -61,7 +61,7 @@ class RandomIssueCommand extends Command
 
         /** @var string|null $languageInput */
         $languageInput = $input->getOption('language');
-        /** @var string|null  $labelInput */
+        /** @var string|null $labelInput */
         $labelInput = $input->getOption('label');
 
         $language = $languageInput ?? 'php';
@@ -115,7 +115,7 @@ class RandomIssueCommand extends Command
         ]);
         $table->setRows([
             ['Link:', sprintf("<href=%s>%s</>", $randomIssue->getUrl(), $randomIssue->getUrl())],
-            ['Date Created:', $randomIssue->getCreatedDate()],
+            ['Date Created:', $randomIssue->getCreatedAt()->format('D, j M Y g:i A \U\T\C')],
             ['Status:', $randomIssue->getState()],
         ]);
         $table->setStyle('borderless');

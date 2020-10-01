@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Icanhazstring\RandomIssuePicker\Model;
 
 use JMS\Serializer\Annotation as Serializer;
+use DateTimeImmutable;
 
 class IssueModel
 {
@@ -28,16 +29,18 @@ class IssueModel
     private $body;
 
     /**
-     * @var string
-     * @Serializer\Type("string")
+     * @var DateTimeImmutable
+     * @Serializer\Type("DateTimeImmutable")
+     * @Serializer\SerializedName("created_at")
      */
-    private $state;
+    private $createdAt;
 
     /**
      * @var string
      * @Serializer\Type("string")
      */
-    private $created_at;
+    private $state;
+
 
     public function getUrl(): string
     {
@@ -54,13 +57,13 @@ class IssueModel
         return $this->body;
     }
 
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
     public function getState(): string
     {
         return $this->state;
-    }
-
-    public function getCreatedDate(): string
-    {
-        return $this->created_at;
     }
 }
