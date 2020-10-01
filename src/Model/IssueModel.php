@@ -66,5 +66,4 @@ class IssueModel
     {
         return $this->state;
     }
-    
 }
