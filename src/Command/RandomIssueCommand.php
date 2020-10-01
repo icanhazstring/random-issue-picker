@@ -115,7 +115,7 @@ class RandomIssueCommand extends Command
         ]);
         $table->setRows([
             ['Link:', sprintf("<href=%s>%s</>", $randomIssue->getUrl(), $randomIssue->getUrl())],
-            ['Date Created:', $randomIssue->getCreatedAt()->format('jS F, Y')],
+            ['Date Created:', $randomIssue->getCreatedAt()->format('D, j M Y g:i A \U\T\C')],
             ['Status:', $randomIssue->getState()],
         ]);
         $table->setStyle('borderless');
