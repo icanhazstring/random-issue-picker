@@ -14,6 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Helper\Table;
 
 class RandomIssueCommand extends Command
 {
@@ -85,17 +86,59 @@ class RandomIssueCommand extends Command
 
         $randomIssue = $searchIssueModel->getItems()[$randomIssueIndex];
 
-        $io->section($randomIssue->getTitle());
-        $io->writeln($randomIssue->getUrl());
-        $io->newLine(2);
+        $randomIssueTitle = $randomIssue->getTitle();
+
+        // cut off title at 90 characters
+        if (strlen($randomIssue->getTitle()) > 70) {
+            $randomIssueTitle = substr($randomIssue->getTitle(), 0, 70) . '...';
+        }
 
         $randomIssueBody = $randomIssue->getBody();
 
+        // cut off body at 300 characters
         if (strlen($randomIssue->getBody()) > 300) {
             $randomIssueBody = substr($randomIssue->getBody(), 0, 300) . '...';
         }
 
-        $io->writeln($randomIssueBody);
+        // output details heading
+        $io->writeln([
+            "",
+            "<comment> Details:</>",
+            sprintf("<comment> %s</>", str_repeat("-", 70))
+        ]);
+
+        // create a table for displaying the title and link
+        $table = new Table($output);
+        $table->setHeaders([
+            // label in white text, title in green text
+            ['<fg=white>Title:</>', sprintf('<info>%s</>', $randomIssueTitle)]
+        ]);
+        $table->setRows([
+            ['Link:', sprintf("<href=%s>%s</>", $randomIssue->getUrl(), $randomIssue->getUrl())],
+            ['Date Created:', $randomIssue->getCreatedAt()->format('jS F, Y')],
+            ['Status:', $randomIssue->getState()],
+        ]);
+        $table->setStyle('borderless');
+        // render table
+        $table->render();
+
+        // print body only if it is not empty
+        if (strlen($randomIssue->getBody()) > 0) {
+            // output issue heading
+            $io->writeln([
+                "",
+                "<comment> Issue:</>",
+                sprintf("<comment> %s</>", str_repeat("-", 70))
+            ]);
+            // wrap lines that are longer than 70 characters
+            $randomIssueBodyLines = wordwrap($randomIssueBody, 70, "\n", true);
+            // indent all lines with two spaces
+            $randomIssueBodyLines = preg_replace("/(^|\n)/", "$1  ", $randomIssueBodyLines);
+            // render body
+            $io->writeln(strval($randomIssueBodyLines));
+        }
+
+        $io->newLine(1);
 
         return 0;
     }
