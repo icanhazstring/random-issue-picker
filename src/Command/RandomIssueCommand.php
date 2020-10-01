@@ -86,7 +86,14 @@ class RandomIssueCommand extends Command
         $randomIssue = $searchIssueModel->getItems()[$randomIssueIndex];
 
         $io->section($randomIssue->getTitle());
-        $io->writeln($randomIssue->getUrl());
+
+        $io->horizontalTable(
+            ['Date Created', 'Status', 'Url'],
+            [
+                [$randomIssue->getCreatedDate(), $randomIssue->getState(), $randomIssue->getUrl()],
+            ]
+        );
+
         $io->newLine(2);
 
         $randomIssueBody = $randomIssue->getBody();
@@ -96,6 +103,8 @@ class RandomIssueCommand extends Command
         }
 
         $io->writeln($randomIssueBody);
+
+
 
         return 0;
     }
