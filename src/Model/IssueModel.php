@@ -42,7 +42,7 @@ class IssueModel
     private $state;
 
     /**
-     * @var array
+     * @var array<string>
      * @Serializer\Type("array")
      */
     private $labels;
@@ -75,7 +75,7 @@ class IssueModel
 
     public function getLabels(): array
     {
-        return array_map(function ($x) {
+        return array_map(function ($x): string {
             return $x["name"];
         }, $this->labels);
     }
