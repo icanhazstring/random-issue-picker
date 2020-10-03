@@ -44,6 +44,6 @@ You can run `make up` to build the image and run the container.
 > For more available commands refer to the [Makefile](Makefile)
 
 After you have done this, you can install the dependencies using `make composer install`.
-If you made you changed, create a pull request and you are ready to go.
+When you've made your changes, create a pull request and you are ready to go.
 
 Have fun contributing :+1:
