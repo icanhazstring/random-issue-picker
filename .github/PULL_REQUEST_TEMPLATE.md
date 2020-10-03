@@ -1,7 +1,7 @@
 ### All Submissions:
 
 * [ ] Does your PR have the correct target branch?
-* [ ] Have you followed the guidelines in our [Contributing document](../CONTRIBUTING.md)?
+* [ ] Have you followed the guidelines for [contributing](../#how-to-contribute)?
 * [ ] Have you checked to ensure there aren't other open [Pull Requests](https://github.com/<User>/<Repository>/pulls) for the same update/change?
 
 <!-- You can erase any parts of this template not applicable to your Pull Request. -->
