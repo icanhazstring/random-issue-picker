@@ -45,7 +45,7 @@ class IssueModel
      * @var array
      * @Serializer\Type("array")
      */
-     private $labels;
+    private $labels;
 
 
     public function getUrl(): string
@@ -75,6 +75,8 @@ class IssueModel
 
     public function getLabels(): array
     {
-        return array_map(function($x) { return $x["name"]; }, $this->labels);
+        return array_map(function ($x) {
+            return $x["name"];
+        }, $this->labels);
     }
 }
