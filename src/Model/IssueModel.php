@@ -42,7 +42,7 @@ class IssueModel
     private $state;
 
     /**
-     * @var array<int,string>
+     * @var array<int,array<string>>
      * @Serializer\Type("array")
      */
     private $labels;
