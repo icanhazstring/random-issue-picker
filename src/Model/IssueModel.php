@@ -41,6 +41,12 @@ class IssueModel
      */
     private $state;
 
+    /**
+     * @var array<int,array<string,mixed>>
+     * @Serializer\Type("array")
+     */
+    private $labels;
+
 
     public function getUrl(): string
     {
@@ -65,5 +71,15 @@ class IssueModel
     public function getState(): string
     {
         return $this->state;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function getLabels(): array
+    {
+        return array_map(function ($x): string {
+            return $x["name"];
+        }, $this->labels);
     }
 }

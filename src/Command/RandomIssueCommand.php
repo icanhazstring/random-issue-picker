@@ -117,8 +117,10 @@ class RandomIssueCommand extends Command
             ['Link:', sprintf("<href=%s>%s</>", $randomIssue->getUrl(), $randomIssue->getUrl())],
             ['Date Created:', $randomIssue->getCreatedAt()->format('D, j M Y g:i A \U\T\C')],
             ['Status:', $randomIssue->getState()],
+            ['Labels:', implode(", ", $randomIssue->getLabels())],
         ]);
         $table->setStyle('borderless');
+        $table->setColumnMaxWidth(1, 80);
         // render table
         $table->render();
 
