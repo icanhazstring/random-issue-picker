@@ -18,15 +18,23 @@ $ bin/rip random:issue
 As a preparation for the [Hacktoberfest 2020](https://hacktoberfest.digitalocean.com) we have added some features to support `language` and `label` as input parameter, so now you can use
 
 ```shell
-$ bin/rip random:issue -l php --label hacktoberfest
+$ bin/rip random:issue -l php -t hacktoberfest -t php --label good-first-isste
 ```
 
 Default values:
 
-| Parameter        |  Default Value       |
-|------------------|----------------------|
-| --language, -l   | php                  |
-| --label          | "good first issue"   |
+| Parameter        |  Default Value       | Example                  |
+|------------------|----------------------|---------------------------
+| --language, -l   | php                  | -l javascript            |
+| --topic, -t      | hacktoberfest        | -t tool -t hacktoberfest |
+| --label          |                      | --label good-first-issue |
+
+Note:
+
+As in the first step a random repository will be searched that matches the
+given language and topics and in the second step a random issue will be selected
+from this repository, it is more likely to not find an issue, if the --label
+parameter is used. 
 
 ## Watch me create this tool
 [YouTube : Making The Tool](https://www.youtube.com/watch?v=QRf4CQxpznM)
