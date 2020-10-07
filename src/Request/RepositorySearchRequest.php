@@ -17,9 +17,12 @@ class RepositorySearchRequest implements RequestInterface
     /** @var string */
     private $language;
 
-    /** @var array */
+    /** @var string[] */
     private $topics;
 
+    /**
+     * @param string[] $topics
+     */
     public function __construct(int $page = 1, int $resultsPerPage = 100, string $language = 'php', array $topics = [])
     {
         $this->page = $page;
@@ -38,6 +41,9 @@ class RepositorySearchRequest implements RequestInterface
         return 'https://api.github.com/search/repositories';
     }
 
+    /**
+     * @return array<string, array<string, int|string>>
+     */
     public function getQueryParameters(): array
     {
         $queryString = '';
@@ -53,10 +59,5 @@ class RepositorySearchRequest implements RequestInterface
                 'page' => $this->page
             ]
         ];
-    }
-
-    public function getResponseModel(): string
-    {
-        return SearchRepositoryModel::class;
     }
 }

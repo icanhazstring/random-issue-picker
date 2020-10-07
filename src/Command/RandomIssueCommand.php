@@ -73,7 +73,7 @@ class RandomIssueCommand extends Command
         $languageInput = $input->getOption('language');
         /** @var string|null $labelInput */
         $labelInput = $input->getOption('label');
-        /** @var string[]|null $repoLabelInput */
+        /** @var string[]|null topicsInput */
         $topicsInput = $input->getOption('topic');
 
         $language = $languageInput ?? 'php';
@@ -123,11 +123,14 @@ class RandomIssueCommand extends Command
 
         return $serializer->deserialize(
             (string) $rawResponse->getBody(),
-            $issueSearchRequest->getResponseModel(),
+            SearchIssueModel::class,
             'json'
         );
     }
 
+    /**
+     * @param string[] $topics
+     */
     private function findRandomRepository(string $language, array $topics): ?string
     {
         if (empty($topics)) {
@@ -152,7 +155,7 @@ class RandomIssueCommand extends Command
         /** @var SearchRepositoryModel $searchRepositoryModel */
         $searchRepositoryModel = $serializer->deserialize(
             (string) $rawResponse->getBody(),
-            $repositorySearchRequest->getResponseModel(),
+            SearchRepositoryModel::class,
             'json'
         );
 

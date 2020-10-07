@@ -38,6 +38,9 @@ class IssueSearchRequest implements RequestInterface
         return 'https://api.github.com/search/issues';
     }
 
+    /**
+     * @return array<string, array<string, int|string>>
+     */
     public function getQueryParameters(): array
     {
         $queryString = '';
@@ -55,10 +58,5 @@ class IssueSearchRequest implements RequestInterface
                 'page' => $this->page
             ]
         ];
-    }
-
-    public function getResponseModel(): string
-    {
-        return SearchIssueModel::class;
     }
 }

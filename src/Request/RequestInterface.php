@@ -12,7 +12,6 @@ interface RequestInterface
 
     public function getUrl(): string;
 
+    /** @return array<string, array<string, int|string>> */
     public function getQueryParameters(): array;
-
-    public function getResponseModel(): string;
 }
