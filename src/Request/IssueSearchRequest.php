@@ -45,10 +45,10 @@ class IssueSearchRequest implements RequestInterface
     {
         $queryString = '';
         if (!empty($this->repository)) {
-            $queryString .= 'repo: ' . $this->repository . ' ';
+            $queryString .= 'repo:' . $this->repository . ' ';
         }
         if (!empty($this->label)) {
-            $queryString .= 'label: ' . $this->label . ' ';
+            $queryString .= 'label:' . $this->label . ' ';
         }
 
         return [

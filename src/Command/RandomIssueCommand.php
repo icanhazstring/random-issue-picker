@@ -93,7 +93,7 @@ class RandomIssueCommand extends Command
             return 0;
         }
 
-        $randomIssue = $this->findIssues($randomRepositoryName)->getRandom();
+        $randomIssue = $this->findIssues($label, $randomRepositoryName)->getRandom();
         if (!$randomIssue) {
             $this->io->warning("No issue was found with your language: $language and label: $label");
 
@@ -105,11 +105,12 @@ class RandomIssueCommand extends Command
         return 0;
     }
 
-    private function findIssues(string $repository): SearchIssueModel
+    private function findIssues(string $label, string $repository): SearchIssueModel
     {
         $issueSearchRequest = new IssueSearchRequest(
             $this->getRandomPageIndex(1),
             100,
+            $label,
             $repository
         );
 
