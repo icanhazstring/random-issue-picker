@@ -15,10 +15,10 @@ $ composer install
 $ bin/rip random:issue
 ```
 
-As a preparation for the [Hacktoberfest 2020](https://hacktoberfest.digitalocean.com) we have added some features to support `language` and `label` as input parameter, so now you can use
+As a preparation for the [Hacktoberfest 2020](https://hacktoberfest.digitalocean.com) we have added some features to support `topic`, `language` and `label` as input parameter, so now you can use
 
 ```shell
-$ bin/rip random:issue -l php -t hacktoberfest -t php --label good-first-isste
+$ bin/rip random:issue -l php -t hacktoberfest -t php --label good-first-issue
 ```
 
 Default values:
