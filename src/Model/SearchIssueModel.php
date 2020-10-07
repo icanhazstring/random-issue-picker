@@ -21,4 +21,16 @@ class SearchIssueModel
     {
         return $this->items;
     }
+
+    public function getRandom(): ?IssueModel
+    {
+        $items = $this->getItems();
+        if (count($items) === 0) {
+            return null;
+        }
+
+        shuffle($items);
+
+        return array_shift($items);
+    }
 }

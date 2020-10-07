@@ -8,30 +8,43 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Icanhazstring\RandomIssuePicker\Model\SearchIssueModel;
+use Icanhazstring\RandomIssuePicker\Model\SearchRepositoryModel;
+use Icanhazstring\RandomIssuePicker\Request\IssueSearchRequest;
+use Icanhazstring\RandomIssuePicker\Request\RepositorySearchRequest;
+use Icanhazstring\RandomIssuePicker\Writer\IssueWriter;
 use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Helper\Table;
 
 class RandomIssueCommand extends Command
 {
-    /**
-     * @var Client
-     */
+    /** @var Client */
     private $client;
+
+    /** @var SymfonyStyle */
+    private $io;
 
     public function __construct()
     {
         parent::__construct('random:issue');
+
         $this->client = new Client();
     }
 
     protected function configure(): void
     {
         $this->setDescription('Select a random issue and show link and description.');
+
+        $this->addOption(
+            'topic',
+            't',
+            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+            'Which topic(s) should the repository have?',
+            []
+        );
 
         $this->addOption(
             'language',
@@ -54,94 +67,102 @@ class RandomIssueCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-
-        $randomPageIndex = random_int(1, 10);
-        $randomIssueIndex = random_int(0, 99);
+        $this->io = new SymfonyStyle($input, $output);
 
         /** @var string|null $languageInput */
         $languageInput = $input->getOption('language');
         /** @var string|null $labelInput */
         $labelInput = $input->getOption('label');
+        /** @var string[]|null $repoLabelInput */
+        $topicsInput = $input->getOption('topic');
 
         $language = $languageInput ?? 'php';
         $label = $labelInput ?? 'good first issue';
+        $topics = !empty($topicsInput) ? $topicsInput : ['hacktoberfest'];
 
-        $res = $this->client->request('GET', 'https://api.github.com/search/issues', [
-            'query' => [
-                'q' => 'is:open is:issue language:' . $language . ' label:"' . $label . '" sort:created-desc',
-                'per_page' => 100,
-                'page' => $randomPageIndex
-            ]
-        ]);
+        $randomRepositoryName = $this->findRandomRepository($language, $topics);
+        if ($randomRepositoryName === null) {
+            $this->io->warning(
+                sprintf(
+                    'No repositories found with language "%s" and topics "%s"',
+                    $language,
+                    implode(',', $topics)
+                )
+            );
 
-        $serializer = SerializerBuilder::create()->build();
-        /** @var SearchIssueModel $searchIssueModel */
-        $searchIssueModel = $serializer->deserialize((string)$res->getBody(), SearchIssueModel::class, 'json');
-
-        if (empty($searchIssueModel->getItems())) {
-            $io->warning("No issue was found with your language: $language and label: $label");
             return 0;
         }
 
-        $randomIssue = $searchIssueModel->getItems()[$randomIssueIndex];
+        $randomIssue = $this->findIssues($randomRepositoryName)->getRandom();
+        if (!$randomIssue) {
+            $this->io->warning("No issue was found with your language: $language and label: $label");
 
-        $randomIssueTitle = $randomIssue->getTitle();
-
-        // cut off title at 90 characters
-        if (strlen($randomIssue->getTitle()) > 70) {
-            $randomIssueTitle = substr($randomIssue->getTitle(), 0, 70) . '...';
+            return 0;
         }
 
-        $randomIssueBody = $randomIssue->getBody();
-
-        // cut off body at 300 characters
-        if (strlen($randomIssue->getBody()) > 300) {
-            $randomIssueBody = substr($randomIssue->getBody(), 0, 300) . '...';
-        }
-
-        // output details heading
-        $io->writeln([
-            "",
-            "<comment> Details:</>",
-            sprintf("<comment> %s</>", str_repeat("-", 70))
-        ]);
-
-        // create a table for displaying the title and link
-        $table = new Table($output);
-        $table->setHeaders([
-            // label in white text, title in green text
-            ['<fg=white>Title:</>', sprintf('<info>%s</>', $randomIssueTitle)]
-        ]);
-        $table->setRows([
-            ['Link:', sprintf("<href=%s>%s</>", $randomIssue->getUrl(), $randomIssue->getUrl())],
-            ['Date Created:', $randomIssue->getCreatedAt()->format('D, j M Y g:i A \U\T\C')],
-            ['Status:', $randomIssue->getState()],
-            ['Labels:', implode(", ", $randomIssue->getLabels())],
-        ]);
-        $table->setStyle('borderless');
-        $table->setColumnMaxWidth(1, 80);
-        // render table
-        $table->render();
-
-        // print body only if it is not empty
-        if (strlen($randomIssue->getBody()) > 0) {
-            // output issue heading
-            $io->writeln([
-                "",
-                "<comment> Issue:</>",
-                sprintf("<comment> %s</>", str_repeat("-", 70))
-            ]);
-            // wrap lines that are longer than 70 characters
-            $randomIssueBodyLines = wordwrap($randomIssueBody, 70, "\n", true);
-            // indent all lines with two spaces
-            $randomIssueBodyLines = preg_replace("/(^|\n)/", "$1  ", $randomIssueBodyLines);
-            // render body
-            $io->writeln(strval($randomIssueBodyLines));
-        }
-
-        $io->newLine(1);
+        (new IssueWriter($output, $this->io, $randomIssue))->write();
 
         return 0;
+    }
+
+    private function findIssues(string $repository): SearchIssueModel
+    {
+        $issueSearchRequest = new IssueSearchRequest(
+            $this->getRandomPageIndex(1),
+            100,
+            $repository
+        );
+
+        $rawResponse = $this->client->request(
+            $issueSearchRequest->getMethod(),
+            $issueSearchRequest->getUrl(),
+            $issueSearchRequest->getQueryParameters()
+        );
+
+        $serializer = SerializerBuilder::create()->build();
+
+        return $serializer->deserialize(
+            (string) $rawResponse->getBody(),
+            $issueSearchRequest->getResponseModel(),
+            'json'
+        );
+    }
+
+    private function findRandomRepository(string $language, array $topics): ?string
+    {
+        if (empty($topics)) {
+            return null;
+        }
+
+        $repositorySearchRequest = new RepositorySearchRequest(
+            $this->getRandomPageIndex(),
+            100,
+            $language,
+            $topics
+        );
+
+        $rawResponse = $this->client->request(
+            $repositorySearchRequest->getMethod(),
+            $repositorySearchRequest->getUrl(),
+            $repositorySearchRequest->getQueryParameters()
+        );
+
+        $serializer = SerializerBuilder::create()->build();
+
+        /** @var SearchRepositoryModel $searchRepositoryModel */
+        $searchRepositoryModel = $serializer->deserialize(
+            (string) $rawResponse->getBody(),
+            $repositorySearchRequest->getResponseModel(),
+            'json'
+        );
+
+        $randomRepository = $searchRepositoryModel->findFirstWithOpenIssues();
+
+        return $randomRepository ? $randomRepository->getFullName() : null;
+    }
+
+    private function getRandomPageIndex(int $max = 10): int
+    {
+        return random_int(1, $max);
     }
 }
