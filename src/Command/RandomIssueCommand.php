@@ -77,7 +77,7 @@ class RandomIssueCommand extends Command
         $topicsInput = $input->getOption('topic');
 
         $language = $languageInput ?? 'php';
-        $label = $labelInput ?? 'good first issue';
+        $label = $labelInput ?? '';
         $topics = !empty($topicsInput) ? $topicsInput : ['hacktoberfest'];
 
         $randomRepositoryName = $this->findRandomRepository($language, $topics);

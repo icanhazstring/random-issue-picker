@@ -38,39 +38,19 @@ class RepositorySearchRequest implements RequestInterface
         return 'https://api.github.com/search/repositories';
     }
 
-    public function getPage(): int
-    {
-        return $this->page;
-    }
-
-    public function getResultsPerPage(): int
-    {
-        return $this->resultsPerPage;
-    }
-
-    public function getLanguage(): string
-    {
-        return $this->language;
-    }
-
-    public function getTopics(): array
-    {
-        return $this->topics;
-    }
-
     public function getQueryParameters(): array
     {
         $queryString = '';
-        foreach ($this->getTopics() as $topic) {
+        foreach ($this->topics as $topic) {
             $queryString .= sprintf('topic:%s ', $topic);
         }
-        $queryString .= ' language:' . $this->getLanguage(). 'sort:updated';
+        $queryString .= 'language:' . $this->language . ' sort:updated';
 
         return [
             'query' => [
                 'q' => $queryString,
-                'per_page' => $this->getResultsPerPage(),
-                'page' => $this->getPage()
+                'per_page' => $this->resultsPerPage,
+                'page' => $this->page
             ]
         ];
     }
