@@ -2,12 +2,8 @@
 
 namespace Icanhazstring\RandomIssuePicker\VersionControlAdapter;
 
-use GuzzleHttp\Client;
-
 interface VersionControlAdapterInterface
 {
-    public function __construct(Client $client);
-
     /**
      * @param array<string> $topics
      */

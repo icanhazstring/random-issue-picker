@@ -8,6 +8,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Icanhazstring\RandomIssuePicker\VersionControlAdapter\Github;
+use Icanhazstring\RandomIssuePicker\VersionControlAdapter\Gitlab;
 use Icanhazstring\RandomIssuePicker\Writer\IssueWriter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,6 +56,21 @@ class RandomIssueCommand extends Command
             InputOption::VALUE_OPTIONAL,
             'Do you want issues for #hacktoberfest?'
         );
+
+        $this->addOption(
+            'source',
+            's',
+            InputOption::VALUE_OPTIONAL,
+            'Which source should be used? Currently github and gitlab are supported',
+            'github'
+        );
+
+        $this->addOption(
+            'pat',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Your personal access token'
+        );
     }
 
     /**
@@ -76,7 +92,15 @@ class RandomIssueCommand extends Command
         $label = $labelInput ?? '';
         $topics = !empty($topicsInput) ? $topicsInput : ['hacktoberfest'];
 
-        $provider = new Github($this->client);
+        switch (strtolower($input->getOption('source'))) {
+            case 'gitlab':
+                $provider = new Gitlab($this->client, $input->getOption('pat'));
+                break;
+            case 'github':
+            default:
+                $provider = new Github($this->client);
+                break;
+        }
 
         $randomRepository = $provider->findRandomRepository($language, $topics);
         if ($randomRepository === null) {

@@ -55,7 +55,7 @@ class Github implements VersionControlAdapterInterface
             $this->getRandomPageIndex(1),
             100,
             $label,
-            $repository->getFullName()
+            $repository->getIdentifier()
         );
 
         $rawResponse = $this->client->request(

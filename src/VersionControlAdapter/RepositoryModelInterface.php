@@ -6,7 +6,7 @@ namespace Icanhazstring\RandomIssuePicker\VersionControlAdapter;
 
 interface RepositoryModelInterface
 {
-    public function getFullName(): string;
+    public function getIdentifier(): string;
 
     public function hasOpenIssues(): bool;
 }
