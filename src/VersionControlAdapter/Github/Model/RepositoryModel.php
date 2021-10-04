@@ -2,11 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Icanhazstring\RandomIssuePicker\Model;
+namespace Icanhazstring\RandomIssuePicker\VersionControlAdapter\Github\Model;
 
+use Icanhazstring\RandomIssuePicker\VersionControlAdapter\RepositoryModelInterface;
 use JMS\Serializer\Annotation as Serializer;
 
-class RepositoryModel
+class RepositoryModel implements RepositoryModelInterface
 {
     /**
      * @var string

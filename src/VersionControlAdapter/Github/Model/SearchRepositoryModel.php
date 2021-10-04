@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Icanhazstring\RandomIssuePicker\Model;
+namespace Icanhazstring\RandomIssuePicker\VersionControlAdapter\Github\Model;
 
 use JMS\Serializer\Annotation as Serializer;
 
@@ -17,7 +17,7 @@ class SearchRepositoryModel
 
     /**
      * @var RepositoryModel[]
-     * @Serializer\Type("array<Icanhazstring\RandomIssuePicker\Model\RepositoryModel>")
+     * @Serializer\Type("array<Icanhazstring\RandomIssuePicker\VersionControlAdapter\Github\Model\RepositoryModel>")
      */
     private $items;
 

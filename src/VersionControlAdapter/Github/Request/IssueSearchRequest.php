@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Icanhazstring\RandomIssuePicker\Request;
+namespace Icanhazstring\RandomIssuePicker\VersionControlAdapter\Github\Request;
 
-use Icanhazstring\RandomIssuePicker\Model\SearchIssueModel;
+use Icanhazstring\RandomIssuePicker\VersionControlAdapter\RequestInterface;
 
 class IssueSearchRequest implements RequestInterface
 {
