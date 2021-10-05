@@ -60,16 +60,9 @@ class RandomIssueCommand extends Command
         $this->addOption(
             'source',
             's',
-            InputOption::VALUE_OPTIONAL,
+            InputOption::VALUE_REQUIRED,
             'Which source should be used? Currently github and gitlab are supported',
             'github'
-        );
-
-        $this->addOption(
-            'pat',
-            null,
-            InputOption::VALUE_OPTIONAL,
-            'Your personal access token'
         );
     }
 
@@ -94,7 +87,7 @@ class RandomIssueCommand extends Command
 
         switch (strtolower($input->getOption('source'))) {
             case 'gitlab':
-                $provider = new Gitlab($this->client, $input->getOption('pat'));
+                $provider = new Gitlab($this->client, $_ENV['GITLAB_PAT'] ?? null);
                 break;
             case 'github':
             default:

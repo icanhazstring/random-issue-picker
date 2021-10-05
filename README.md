@@ -21,6 +21,15 @@ As a preparation for the [Hacktoberfest 2020](https://hacktoberfest.digitalocean
 $ bin/rip random:issue -l php -t hacktoberfest -t php --label good-first-issue
 ```
 
+As a preparation for the [Hacktoberfest 2021](https://hacktoberfest.digitalocean.com) we have added support for Gitlab. To search for Gitlab projects the input parameter `--source (-s)` was added.
+GitLab requires a [Personal Access Token](https://gitlab.com/-/profile/personal_access_tokens). If you want to use Gitlab as Provider you need to add your PAT into the `.env` File.
+
+```shell
+# .env
+# GITLAB_PAT=<gitlab personal access token>
+$ bin/rip random:issue -s gitlab
+```
+
 Default values:
 
 | Parameter        |  Default Value       | Example                  |
@@ -28,6 +37,7 @@ Default values:
 | --language, -l   | php                  | -l javascript            |
 | --topic, -t      | hacktoberfest        | -t tool -t hacktoberfest |
 | --label          |                      | --label good-first-issue |
+| --source, -s     | github               | -s github|gitlab         |
 
 Note:
 

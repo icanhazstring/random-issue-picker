@@ -2,3 +2,4 @@ composer.phar
 /vendor/
 cs-check.json
 composer.lock
+.env
