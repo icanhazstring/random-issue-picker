@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Icanhazstring\RandomIssuePicker\Request;
+namespace Icanhazstring\RandomIssuePicker\VersionControlAdapter;
 
 interface RequestInterface
 {
@@ -12,6 +12,6 @@ interface RequestInterface
 
     public function getUrl(): string;
 
-    /** @return array<string, array<string, int|string>> */
+    /** @return array<string, mixed> */
     public function getQueryParameters(): array;
 }

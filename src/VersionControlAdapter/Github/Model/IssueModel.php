@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Icanhazstring\RandomIssuePicker\Model;
+namespace Icanhazstring\RandomIssuePicker\VersionControlAdapter\Github\Model;
 
+use Icanhazstring\RandomIssuePicker\VersionControlAdapter\IssueModelInterface;
 use JMS\Serializer\Annotation as Serializer;
 use DateTimeImmutable;
 
-class IssueModel
+class IssueModel implements IssueModelInterface
 {
     /**
      * @var string

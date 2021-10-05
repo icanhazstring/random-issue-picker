@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Icanhazstring\RandomIssuePicker\Writer;
 
-use Icanhazstring\RandomIssuePicker\Model\IssueModel;
+use Icanhazstring\RandomIssuePicker\VersionControlAdapter\IssueModelInterface;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -17,10 +17,10 @@ class IssueWriter
     /** @var SymfonyStyle */
     private $io;
 
-    /** @var IssueModel */
+    /** @var IssueModelInterface */
     private $issueModel;
 
-    public function __construct(OutputInterface $output, SymfonyStyle $io, IssueModel $issueModel)
+    public function __construct(OutputInterface $output, SymfonyStyle $io, IssueModelInterface $issueModel)
     {
         $this->output = $output;
         $this->io = $io;

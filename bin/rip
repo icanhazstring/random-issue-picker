@@ -9,6 +9,12 @@ use Symfony\Component\Console\Application;
 
 Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
 
+
+$dotenv = new \Symfony\Component\Dotenv\Dotenv();
+if (file_exists(__DIR__.'/../.env')) {
+    $dotenv->load(__DIR__ . '/../.env');
+}
+
 $application = new Application();
 
 $application->add(new RandomIssueCommand());

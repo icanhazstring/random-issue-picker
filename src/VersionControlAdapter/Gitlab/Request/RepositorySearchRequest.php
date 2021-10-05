@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Icanhazstring\RandomIssuePicker\Request;
+namespace Icanhazstring\RandomIssuePicker\VersionControlAdapter\Gitlab\Request;
 
-use Icanhazstring\RandomIssuePicker\Model\SearchRepositoryModel;
+use Icanhazstring\RandomIssuePicker\VersionControlAdapter\RequestInterface;
 
 class RepositorySearchRequest implements RequestInterface
 {
@@ -38,26 +38,22 @@ class RepositorySearchRequest implements RequestInterface
 
     public function getUrl(): string
     {
-        return 'https://api.github.com/search/repositories';
+        return 'https://gitlab.com/api/v4/projects';
     }
 
     /**
-     * @return array<string, array<string, int|string>>
+     * @return array<string, int|string|bool>
      */
     public function getQueryParameters(): array
     {
-        $queryString = '';
-        foreach ($this->topics as $topic) {
-            $queryString .= sprintf('topic:%s ', $topic);
-        }
-        $queryString .= 'language:' . $this->language . ' sort:updated';
-
         return [
-            'query' => [
-                'q' => $queryString,
-                'per_page' => $this->resultsPerPage,
-                'page' => $this->page
-            ]
+            'topic' => implode(',', $this->topics),
+            'with_programming_language' => $this->language,
+            'per_page' => $this->resultsPerPage,
+            'page' => $this->page,
+            'visibility' => 'public',
+            'with_merge_requests_enabled' => true,
+            'order_by' => 'last_activity_at'
         ];
     }
 }

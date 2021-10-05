@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Icanhazstring\RandomIssuePicker\Model;
+namespace Icanhazstring\RandomIssuePicker\VersionControlAdapter\Gitlab\Model;
 
+use Icanhazstring\RandomIssuePicker\VersionControlAdapter\RepositoryModelInterface;
 use JMS\Serializer\Annotation as Serializer;
 
-class RepositoryModel
+class RepositoryModel implements RepositoryModelInterface
 {
     /**
      * @var string
      * @Serializer\Type("string")
-     * @Serializer\SerializedName("full_name")
+     * @Serializer\SerializedName("id")
      */
-    private $fullName;
+    private $id;
 
     /**
      * @var int
@@ -22,9 +23,9 @@ class RepositoryModel
      */
     private $openIssuesCount;
 
-    public function getFullName(): string
+    public function getIdentifier(): string
     {
-        return $this->fullName;
+        return $this->id;
     }
 
     public function hasOpenIssues(): bool

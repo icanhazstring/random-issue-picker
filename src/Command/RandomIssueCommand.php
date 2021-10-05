@@ -7,12 +7,9 @@ namespace Icanhazstring\RandomIssuePicker\Command;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Icanhazstring\RandomIssuePicker\Model\SearchIssueModel;
-use Icanhazstring\RandomIssuePicker\Model\SearchRepositoryModel;
-use Icanhazstring\RandomIssuePicker\Request\IssueSearchRequest;
-use Icanhazstring\RandomIssuePicker\Request\RepositorySearchRequest;
+use Icanhazstring\RandomIssuePicker\VersionControlAdapter\Github;
+use Icanhazstring\RandomIssuePicker\VersionControlAdapter\Gitlab;
 use Icanhazstring\RandomIssuePicker\Writer\IssueWriter;
-use JMS\Serializer\SerializerBuilder;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -59,6 +56,14 @@ class RandomIssueCommand extends Command
             InputOption::VALUE_OPTIONAL,
             'Do you want issues for #hacktoberfest?'
         );
+
+        $this->addOption(
+            'source',
+            's',
+            InputOption::VALUE_REQUIRED,
+            'Which source should be used? Currently github and gitlab are supported',
+            'github'
+        );
     }
 
     /**
@@ -80,8 +85,18 @@ class RandomIssueCommand extends Command
         $label = $labelInput ?? '';
         $topics = !empty($topicsInput) ? $topicsInput : ['hacktoberfest'];
 
-        $randomRepositoryName = $this->findRandomRepository($language, $topics);
-        if ($randomRepositoryName === null) {
+        switch (strtolower($input->getOption('source'))) {
+            case 'gitlab':
+                $provider = new Gitlab($this->client, $_ENV['GITLAB_PAT'] ?? null);
+                break;
+            case 'github':
+            default:
+                $provider = new Github($this->client);
+                break;
+        }
+
+        $randomRepository = $provider->findRandomRepository($language, $topics);
+        if ($randomRepository === null) {
             $this->io->warning(
                 sprintf(
                     'No repositories found with language "%s" and topics "%s"',
@@ -93,7 +108,8 @@ class RandomIssueCommand extends Command
             return 0;
         }
 
-        $randomIssue = $this->findIssues($label, $randomRepositoryName)->getRandom();
+        $randomIssue = $provider->findRandomIssueFromRepository($randomRepository, $label);
+
         if (!$randomIssue) {
             $this->io->warning("No issue was found with your language: $language and label: $label");
 
@@ -103,70 +119,5 @@ class RandomIssueCommand extends Command
         (new IssueWriter($output, $this->io, $randomIssue))->write();
 
         return 0;
-    }
-
-    private function findIssues(string $label, string $repository): SearchIssueModel
-    {
-        $issueSearchRequest = new IssueSearchRequest(
-            $this->getRandomPageIndex(1),
-            100,
-            $label,
-            $repository
-        );
-
-        $rawResponse = $this->client->request(
-            $issueSearchRequest->getMethod(),
-            $issueSearchRequest->getUrl(),
-            $issueSearchRequest->getQueryParameters()
-        );
-
-        $serializer = SerializerBuilder::create()->build();
-
-        return $serializer->deserialize(
-            (string) $rawResponse->getBody(),
-            SearchIssueModel::class,
-            'json'
-        );
-    }
-
-    /**
-     * @param string[] $topics
-     */
-    private function findRandomRepository(string $language, array $topics): ?string
-    {
-        if (empty($topics)) {
-            return null;
-        }
-
-        $repositorySearchRequest = new RepositorySearchRequest(
-            $this->getRandomPageIndex(),
-            100,
-            $language,
-            $topics
-        );
-
-        $rawResponse = $this->client->request(
-            $repositorySearchRequest->getMethod(),
-            $repositorySearchRequest->getUrl(),
-            $repositorySearchRequest->getQueryParameters()
-        );
-
-        $serializer = SerializerBuilder::create()->build();
-
-        /** @var SearchRepositoryModel $searchRepositoryModel */
-        $searchRepositoryModel = $serializer->deserialize(
-            (string) $rawResponse->getBody(),
-            SearchRepositoryModel::class,
-            'json'
-        );
-
-        $randomRepository = $searchRepositoryModel->findFirstWithOpenIssues();
-
-        return $randomRepository ? $randomRepository->getFullName() : null;
-    }
-
-    private function getRandomPageIndex(int $max = 10): int
-    {
-        return random_int(1, $max);
     }
 }
