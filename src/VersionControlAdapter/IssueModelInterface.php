@@ -6,7 +6,6 @@ namespace Icanhazstring\RandomIssuePicker\VersionControlAdapter;
 
 interface IssueModelInterface
 {
-
     public function getUrl(): string;
 
     public function getTitle(): string;
